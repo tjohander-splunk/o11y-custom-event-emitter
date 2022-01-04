@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:us-east-2:455790677231:codestar-notifications-spring-pet-clinic:65ffcfa2-7e9a-4719-894e-58adf5579e05",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "eb3420a3-6859-5d3d-9b73-7a9f4d873a16",
+        "TopicArn": "arn:aws:sns:us-east-2:455790677231:codestar-notifications-spring-pet-clinic",
+        "Subject": null,
+        "Message": "{\"account\":\"455790677231\",\"detailType\":\"CodePipeline Action Execution State Change\",\"region\":\"us-east-2\",\"source\":\"aws.codepipeline\",\"time\":\"2021-12-21T18:57:22Z\",\"notificationRuleArn\":\"arn:aws:codestar-notifications:us-east-2:455790677231:notificationrule/c7a8bc51041a7814685e82c0e6f72444c85dd3ba\",\"detail\":{\"pipeline\":\"Spring-Pet-Clinic\",\"execution-id\":\"3d3b042b-44d5-4a5c-a33f-19bbaa67794a\",\"stage\":\"Deploy\",\"execution-result\":{\"external-execution-url\":\"https://console.aws.amazon.com/codedeploy/home?region=us-east-2#/deployments/d-HD7XQX8OD\",\"external-execution-summary\":\"Deployment Succeeded\",\"external-execution-id\":\"d-HD7XQX8OD\"},\"action\":\"Deploy\",\"state\":\"SUCCEEDED\",\"region\":\"us-east-2\",\"type\":{\"owner\":\"AWS\",\"provider\":\"CodeDeploy\",\"category\":\"Deploy\",\"version\":\"1\"},\"version\":2.0},\"resources\":[\"arn:aws:codepipeline:us-east-2:455790677231:Spring-Pet-Clinic\"],\"additionalAttributes\":{}}",
+        "Timestamp": "2021-12-21T18:57:34.051Z",
+        "SignatureVersion": "1",
+        "Signature": "AtoeXCUI6eMimVWXR1HNXRZp2YmMW6wdWSeN5D6Y4CnlC4RDda0eMvzZP+KaXPoSe2WQ1YuqS/KOfKkDSSuas5qmJ119Wv7IfZPvtwZmt+XflQBdpjEtJts7RA604pQKF8W1Tv35nKrqRCsqU4LjOi7pdNLXohrUVzaXk3lV0CoBY8M8ftYTsbY5je15GaINwHvSmAtnHpKcUi5NL/j/2jwNYyn65xS/UyM+NoGkA5pNZfmOqFTZyKjtwKBQaYv4qaaEtkMdGQ4T+0G2peDqLy9yqikdnKIRSPIlC1lj3z5dPNqf9CO8N1EVP8ffx2pKi7Iol+vXxgXFkjxOGU805w==",
+        "SigningCertUrl": "https://sns.us-east-2.amazonaws.com/SimpleNotificationService-7ff5318490ec183fbaddaa2a969abfda.pem",
+        "UnsubscribeUrl": "https://sns.us-east-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-east-2:455790677231:codestar-notifications-spring-pet-clinic:65ffcfa2-7e9a-4719-894e-58adf5579e05",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}

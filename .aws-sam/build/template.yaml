@@ -1,0 +1,13 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: app.lambdaHandler
+      CodeUri: Function
+      Runtime: nodejs14.x
+      Environment:
+        Variables:
+          ACCESS_TOKEN: k9HGA_tCfVk1xNK0fONvGg
+          REALM: us0
