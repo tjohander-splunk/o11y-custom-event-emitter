@@ -1,13 +1,42 @@
-Resources:
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'o11y-event-emitter-lambda
+
+  Sample SAM Template for o11y-event-emitter-lambda
+
+  '
+Globals:
   Function:
+    Timeout: 3
+Resources:
+  O11yEventEmitterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Timeout: 300
-      MemorySize: 128
+      CodeUri: O11yEventEmitterFunction
       Handler: app.lambdaHandler
-      CodeUri: Function
       Runtime: nodejs14.x
-      Environment:
-        Variables:
-          ACCESS_TOKEN: k9HGA_tCfVk1xNK0fONvGg
-          REALM: us0
+      Architectures:
+      - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /event
+            Method: get
+Outputs:
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/event/
+  O11yEventEmitter:
+    Description: Hello World Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - O11yEventEmitterFunction
+      - Arn
+  O11yEventEmitterIamRole:
+    Description: Implicit IAM Role created for Hello World function
+    Value:
+      Fn::GetAtt:
+      - O11yEventEmitterFunctionRole
+      - Arn
