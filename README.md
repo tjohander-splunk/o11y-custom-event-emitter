@@ -19,6 +19,11 @@ For the purposes of a proof-of-concept, it would be sufficient to have a simple 
 
 Configuring this Codepipeline workflow isn't trivial but can be accomplished in the AWS Console with these steps:
 
+### Pre Requisites
+* Setup a Connection between Github and AWS
+* Create an EC2 instance to run the application
+* Optional: Create an IAM Policy and Role for the Codebuild pipeline 
+
 ### Step 1: Create a New Pipeline
 
 In the AWS Console, head to the CodePipeline service and click "Create Pipeline".  The role name that AWS creates on your behalf will include the name you give to the pipeline.  
@@ -45,22 +50,23 @@ This only needs to be done once.  The result is an AWS resource that is not dire
 This stage will receive the application source code and execute the steps needed to build the application: download dependencies, compile the source code, 
 run any unit & integration tests and any other tasks needed to convert the source code into a runnable application that can be deployed to an application 
 server or other runtime environment.
-* For the Build Provider, select "AWS CodeBuild" Select the region in which you want this build to be executed:
-* Click "Create Build Project".  You'll be presented with a popup to configure a new Build project.  
-* Apply settings appropriate to your environment:
+* For the Build Provider, select "AWS CodeBuild" and select the region in which you want this build to be executed
+* Click "Create Build Project".  You'll be presented with a popup to configure a new Build project.
+
+Apply settings similar to the following:
 ![project-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/3-Build-Stage-ProjectConfiguration-Settings.png?raw=true)
 ![source-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/4-Build-Stage-Source-Configuration-Settings.png?raw=true)
 ![environment-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/5-Build-Stage-Environment-Configuration-Settings.png?raw=true)
 ![buildspec-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/6-Build-Stage-Buildspec-Configuration-Settings.png?raw=true)
-![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/7-Build-Stage-Artifact-Configuation-Settings.png?raw=true)
-* Once a build project is either created or an existing build project is selected, the Build stage configuration should look similar to this:
-![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/3a-Build-Stage-Completed-State.png?raw=true)
-
 ##### Note on Cache Settings
 This may not be necessary if you choose to build and deploy an application other than Spring Pet Clinic, a Spring Boot / Java project with many dependencies.  Each time the build process is executed, the build environment re-downloads all these dependencies.  This can take over 5 minutes and can get tedious while iterating or demoing the solution. The screenshots reflect the necessary configuration to cache these dependencies in an S3 bucket, thus greatly speeding up the time needed to build this particular application.
+![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/7-Build-Stage-Artifact-Configuation-Settings.png?raw=true)
+* Once a build project is either created or an existing build project is selected, the Build stage configuration should look similar to this:
+![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/3aa-Build-Stage-Completed-State.png?raw=true)
+
 
 #### Step 4: Setup the Pipeline's "Deploy" Stage
-This step will take the "built" application artifact from the previous stage and deploy it to an EC2 instance
+This step will take the application artifact created in the previous step and deploy it to an EC2 instance
 * 
 
 
