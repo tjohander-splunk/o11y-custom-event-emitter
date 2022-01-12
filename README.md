@@ -19,9 +19,13 @@ For the purposes of a proof-of-concept, it would be sufficient to have a simple 
 
 Configuring this Codepipeline workflow isn't trivial but can be accomplished in the AWS Console with these steps:
 
-### Step 1: Create A Connection to Github
-Create a connection to Github:
-![image](https://github.com/thecodebuzz/FileSizePOC/blob/master/docs/images/1-Codepipeline-Settings.png?raw=true)
+### Step 1: Create a New Pipeline
+
+In the AWS Console, head to the CodePipeline service and click "Create Pipeline":  
+
+![image](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/1-Codepipeline-Settings.png?raw=true)
+
+#### Step 2:
 
 
 
