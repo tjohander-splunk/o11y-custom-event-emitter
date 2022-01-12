@@ -19,9 +19,11 @@ For the purposes of a proof-of-concept, it would be sufficient to have a simple 
 
 Configuring this Codepipeline workflow isn't trivial but can be accomplished in the AWS Console with these steps:
 
-### Pre Requisites
+### Pre-Requisites
 * Setup a Connection between Github and AWS
 * Create an EC2 instance to run the application
+* Create a CodeDeploy Application and Deployment Group
+* Install the SAM CLI
 * Optional: Create an IAM Policy and Role for the Codebuild pipeline 
 
 ### Step 1: Create a New Pipeline
@@ -62,12 +64,95 @@ Apply settings similar to the following:
 This may not be necessary if you choose to build and deploy an application other than Spring Pet Clinic, a Spring Boot / Java project with many dependencies.  Each time the build process is executed, the build environment re-downloads all these dependencies.  This can take over 5 minutes and can get tedious while iterating or demoing the solution. The screenshots reflect the necessary configuration to cache these dependencies in an S3 bucket, thus greatly speeding up the time needed to build this particular application.
 ![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/7-Build-Stage-Artifact-Configuation-Settings.png?raw=true)
 * Once a build project is either created or an existing build project is selected, the Build stage configuration should look similar to this:
-![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/3aa-Build-Stage-Completed-State.png?raw=true)
+![build-stage-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/3aa-Build-Stage-Completed-State.png?raw=true)
 
 
 #### Step 4: Setup the Pipeline's "Deploy" Stage
-This step will take the application artifact created in the previous step and deploy it to an EC2 instance
-* 
+This step will take the application artifact created in the previous step and deploy it to an EC2 instance. In order to complete the configuration for this stage, we must first create a CodeDeploy Application resource and a Deployment Group for that application. 
+
+* In AWS CodeDeploy, go the "Applications" interface
+
+  ![codedeploy-side-nav](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8b-code-deploy-side-nav.png?raw=true)
+
+* Select "Create New Application"
+* Fill in the fields to create an application:
+![application-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8c-code-deploy-application.png?raw=true)
+* Create a Deployment Group as the deployment target. In this case, we'll deploy the application executable to any EC2 instances that match the tags we specify in the Environment Configuration section. You'll know you've got things lined up correctly when the UI reports that it matched an instance:
+
+  ![deployment-group-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8d-code-deploy-deployment-group.png?raw=true)
+
+* Once this is all created, the fields in the Deploy stage should auto-populate with valid options for each field similar to the screenshot below:
+
+  ![completed-deploy-stage](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8e-completed-deploy-stage.png?raw=true)
+
+* After the Source, Build and Deploy stages are complete you should be presented with a final review and an option to "Create Pipeline":
+
+  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/11-Pipeline-Config-Review.png?raw=true)
+
+Create the pipeline and move on to the next step.
+
+#### Step 5: Create SNS Topic
+This step will create the SNS (Simple Notification Service) topic that to which the Lambda function will subscribe.
+
+* Head over to the AWS SNS UI, select "Topics" and click the "Create New Topic" button.  Create a topic with these values:
+
+  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/9-SNS-Topic-Settings.png?raw=true)
+Note the ARN of this topic.  It will be needed in the next step.
+
+#### Step 7: Update the Lambda definition to trigger on receipt of a notification on the SNS topic
+* In the `template.yaml` file located in the root of this project, fill in the topic ARN here:
+  ```yaml
+  Resources:
+    O11yEventEmitterFunction:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        CodeUri: o11y-event-emitter/
+        Handler: app.lambdaHandler
+        Runtime: nodejs12.x
+        Architectures:
+          - x86_64
+        Events:
+          HelloWorld:
+            Type: SNS
+            Properties:
+              Topic: <insert-arn-here> 
+  ```
+#### Step 8: Create Notification Rule For The CodePipeline
+Now that we have a topic created, configure the pipeline to send notifications of various events to the SNS topic.
+
+* In the main pipeline UI, select "Notifiy", then "Create Notification Rule".  Fill on values to reflect a configuration like this:
+
+  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/10-Pipeline-Notification-Rule.png?raw=true)
+
+The SNS topic should auto-populate as an option in the "Choose target" field.
+
+That's it! The pipeline is complete.  Now we will need to deploy our Lambda function and then test everything out by pushing a small change to the application to kick off the pipeline.
+
+#### Step 9: Deploy the Lambda function with the SAM CLI
+* From a terminal instance with the SAM CLI installed and configured, execute the following commands:
+   ```bash
+   sam build
+   ```
+   ```bash
+   sam deploy --guided --parameter-overrides Realm=<o11y cloud realm> AccessToken=<o11y cloud access token> 
+   ```
+
+#### Step 10: Push a small change to the source application code to trigger a pipeline execution
+Any change to the source code in the repository will trigger a change.  You can even just edit the README.md file in the root of the project.  It's nice to show an acutal change to the application, so maybe editing the welcome message that's presented to users on the landing page of the web app is something we want to do.
+
+It's easy to make the change, simply open the file located at `src/main/resources/messages/messages.properties`
+and edit the `welcome` message.  This text is immediately visible on the landing page and demonstrates that the application code has indeed changed and been deployed to a functional runtime environment.
+
+Once you edit the file execute standard `git` commands to push your change to Github:
+
+```bash
+git add .
+git commit -m "Updated the welcome message"
+git push
+```
+
+#### Step 11: Validate you have custom events in O11y Cloud
+
 
 
 ## Serverless Application Model (SAM) Technical Data
@@ -131,7 +216,7 @@ Build your application with the `sam build` command.
 o11y-custom-event-emitter-lambda$ sam build
 ```
 
-The SAM CLI installs dependencies defined in `hello-world/package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
+The SAM CLI installs dependencies defined in `o11y-custom-event-emitter-lambda/package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
 
 Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
 
