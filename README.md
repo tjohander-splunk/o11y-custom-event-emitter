@@ -1,10 +1,37 @@
-# o11y-custom-event-emitter-lambda
+# Custom Observability Event Emitter for AWS Codepipeline CI/CD 
 
+## Overview
+This AWS Lambda function is designed to ingest AWS Codepipeline Events published to an AWS SNS (Simple Notification Service) topic and POST them to Splunk Observability Cloud.
+
+The basic workflow includes these stages:
+1. A connection is configured between a Github repository & AWS Codepipeline.
+2. When changes on a watched branch are committed to Github, AWS Codepipeline takes over to pull the source code.  A notification of this event is published to the SNS Topic
+3. The Lambda function has a subscription to the notification topic and is invoked with the payload of the message as the function's input.
+4. The function creates a simple POST payload that's sent to the Observability Ingest API.  The payload is designed to carry some details about the Codepipeline event that invoked the function.
+5. At each subsequent stage in the Codepipeline process, the same process repeats itself. 
+6. Once these events are POSTed to Observability Cloud, they can be added as event overlays on various Charts and Dashboard elements, as well as represented as Table or Counter charts.  The possibilities are endless :smile:
+
+## Implementing The Workflow
+For the purposes of a proof-of-concept, it would be sufficient to have a simple pipeline that includes three stages to a CI/CD workflow:
+* Source
+* Build
+* Deploy
+
+Configuring this Codepipeline workflow isn't trivial but can be accomplished in the AWS Console with these steps:
+
+### Step 1: Create A Connection to Github
+Create a connection to Github:
+![image](https://github.com/thecodebuzz/FileSizePOC/blob/master/docs/images/1-Codepipeline-Settings.png?raw=true)
+
+
+
+
+## Serverless Application Model (SAM) Technical Data
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
-- hello-world - Code for the application's Lambda function.
+- o11y-event-emitter - Code for the application's Lambda function.
 - events - Invocation events that you can use to invoke the function.
-- hello-world/tests - Unit tests for the application code. 
+- o11y-event-emitter/tests - Unit tests for the application code. 
 - template.yaml - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
@@ -38,10 +65,10 @@ To build and deploy your application for the first time, run the following in yo
 
 ```bash
 sam build
-sam deploy --guided
+sam deploy --guided --parameter-overrides Realm=<o11y cloud realm> AccessToken=<o11y cloud access token> 
 ```
 
-The first command will build the source of your application. The second command will package and deploy your application to AWS, with a series of prompts:
+The first command will build the source of your application. The second command will package and deploy your application to AWS, with a series of prompts and supply secrets as environment variables
 
 * **Stack Name**: The name of the stack to deploy to CloudFormation. This should be unique to your account and region, and a good starting point would be something matching your project name.
 * **AWS Region**: The AWS region you want to deploy your app to.
@@ -49,7 +76,8 @@ The first command will build the source of your application. The second command 
 * **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modifies IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
 * **Save arguments to samconfig.toml**: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to your application.
 
-You can find your API Gateway Endpoint URL in the output values displayed after deployment.
+#### `--parameter-overrides`
+This mechanism applies your specific O11y Cloud Access Token to the Lambda when it's deployed with AWS.  These values are required for the Lambda function to successfully POST events to O11y Cloud
 
 ## Use the SAM CLI to build and test locally
 
@@ -66,7 +94,7 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-o11y-custom-event-emitter-lambda$ sam local invoke HelloWorldFunction --event events/event.json
+o11y-custom-event-emitter-lambda$ sam local invoke O11yEventEmitterFunction --event events/codepipline-event.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
@@ -97,7 +125,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-o11y-custom-event-emitter-lambda$ sam logs -n HelloWorldFunction --stack-name o11y-custom-event-emitter-lambda --tail
+o11y-custom-event-emitter-lambda$ sam logs -n O11yEventEmitterFunction --stack-name o11y-custom-event-emitter-lambda --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -107,9 +135,9 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `hello-world/tests` folder in this project. Use NPM to install the [Mocha test framework](https://mochajs.org/) and run unit tests.
 
 ```bash
-o11y-custom-event-emitter-lambda$ cd hello-world
-hello-world$ npm install
-hello-world$ npm run test
+o11y-custom-event-emitter-lambda$ cd o11y-event-emitter
+o11y-event-emitter$ npm install
+o11y-event-emitter$ npm run test
 ```
 
 ## Cleanup

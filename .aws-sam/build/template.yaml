@@ -5,37 +5,44 @@ Description: 'o11y-event-emitter-lambda
   Sample SAM Template for o11y-event-emitter-lambda
 
   '
+Parameters:
+  Realm:
+    Type: String
+  AccessToken:
+    Type: String
+    NoEcho: true
 Globals:
   Function:
     Timeout: 3
+    Environment:
+      Variables:
+        ACCESS_TOKEN:
+          Ref: AccessToken
+        REALM:
+          Ref: Realm
 Resources:
   O11yEventEmitterFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: O11yEventEmitterFunction
       Handler: app.lambdaHandler
-      Runtime: nodejs14.x
+      Runtime: nodejs12.x
       Architectures:
       - x86_64
       Events:
         HelloWorld:
-          Type: Api
+          Type: SNS
           Properties:
-            Path: /event
-            Method: get
+            Topic: arn:aws:sns:us-east-2:455790677231:codestar-notifications-spring-pet-clinic
 Outputs:
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/event/
   O11yEventEmitter:
-    Description: Hello World Lambda Function ARN
+    Description: O11y Event Emitter Lambda Function ARN
     Value:
       Fn::GetAtt:
       - O11yEventEmitterFunction
       - Arn
   O11yEventEmitterIamRole:
-    Description: Implicit IAM Role created for Hello World function
+    Description: Implicit IAM Role created for O11y Event Emitter function
     Value:
       Fn::GetAtt:
       - O11yEventEmitterFunctionRole
