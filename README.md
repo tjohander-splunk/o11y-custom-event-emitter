@@ -20,11 +20,20 @@ For the purposes of a proof-of-concept, it would be sufficient to have a simple 
 Configuring this Codepipeline workflow isn't trivial but can be accomplished in the AWS Console with these steps:
 
 ### Pre-Requisites
-* Setup a Connection between Github and AWS
-* Create an EC2 instance to run the application
-* Create a CodeDeploy Application and Deployment Group
-* Install the SAM CLI
-* Optional: Create an IAM Policy and Role for the Codebuild pipeline 
+* Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) & [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html).
+* Create an EC2 instance to run the Spring Boot application
+```bash
+aws ec2 run-instances \
+--image-id ami-002068ed284fb165b \
+--count 1 \
+--instance-type t2.micro \
+--key-name <a valid AWS key pair to which you have access> \
+--security-group-ids <a security group with SSH and TCP 8080 open from any ip> \
+--associate-public-ip-address \
+--user-data $(curl https://raw.githubusercontent.com/tjohander-splunk/aws-one-liners/main/user-data-scripts/spring-boot-app-server.sh | base64) \
+--tag-specifications 'ResourceType=instance,Tags=[{Key=application,Value=Spring-Pet-Clinic}]'
+```
+* Fork and Clone the Spring Boot Pet Clinic [App and supporting AWS CodeDeploy files](https://github.com/tjohander-splunk/spring-petclinic)
 
 ### Step 1: Create a New Pipeline
 
@@ -154,7 +163,7 @@ git push
 #### Step 11: Validate you have custom events in O11y Cloud
 Once the pipeline completes successfully, you should be able to search O11y for your custom events.  To do so, open up a Dashboard and look for matching events in the `Event Overlay` field or in the Event Finder panel.  Once your events are located you can set them as overlays, create a Table chart showing a list of events, etc...
 
-  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/11a-o11y-cloud-events-overlay.png?raw=true)
+ ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/11a-o11y-cloud-events-overlay.png?raw=true)
 
 ## Serverless Application Model (SAM) Technical Data
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
