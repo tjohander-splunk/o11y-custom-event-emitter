@@ -152,8 +152,9 @@ git push
 ```
 
 #### Step 11: Validate you have custom events in O11y Cloud
+Once the pipeline completes successfully, you should be able to search O11y for your custom events.  To do so, open up a Dashboard and look for matching events in the `Event Overlay` field or in the Event Finder panel.  Once your events are located you can set them as overlays, create a Table chart showing a list of events, etc...
 
-
+  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/11a-o11y-cloud-events-overlay.png?raw=true)
 
 ## Serverless Application Model (SAM) Technical Data
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
