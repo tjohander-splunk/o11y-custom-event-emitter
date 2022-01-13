@@ -39,7 +39,7 @@ aws ec2 run-instances \
 
 In the AWS Console, head to the CodePipeline service and click "Create Pipeline".  The role name that AWS creates on your behalf will include the name you give to the pipeline.  
 
-![image](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/1-Codepipeline-Settings.png?raw=true)
+![image](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/1-Codepipeline-Settings.png?raw=true)
 
 Click "Next"
 
@@ -50,11 +50,11 @@ This only needs to be done once.  The result is an AWS resource that is not dire
 * Select Github (Version 2) as your Source Provider
 * Click "Connect to Github"
 * You'll be prompted to create a Connection Name:
-  ![connection-example-1](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/2c-github-connection-popup.png?raw=true)
+  ![connection-example-1](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/2c-github-connection-popup.png?raw=true)
 * Then you'll be asked to sign in to Github:
-  ![github-login](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/2d-sign-in-to-github.png?raw=true)
+  ![github-login](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/2d-sign-in-to-github.png?raw=true)
 * The Github Connection should be created and its ARN added to the Source configuration. Complete the fields for the Github repository and branch you want this pipeline to watch:
-  ![source-settings](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/2-Source-Stage-Settings.png?raw=true)
+  ![source-settings](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/2-Source-Stage-Settings.png?raw=true)
 
 
 #### 3: Setup the Pipeline's "Build" Stage
@@ -65,15 +65,15 @@ server or other runtime environment.
 * Click "Create Build Project".  You'll be presented with a popup to configure a new Build project.
 
 Apply settings similar to the following:
-![project-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/3-Build-Stage-ProjectConfiguration-Settings.png?raw=true)
-![source-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/4-Build-Stage-Source-Configuration-Settings.png?raw=true)
-![environment-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/5-Build-Stage-Environment-Configuration-Settings.png?raw=true)
-![buildspec-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/6-Build-Stage-Buildspec-Configuration-Settings.png?raw=true)
+![project-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/3-Build-Stage-ProjectConfiguration-Settings.png?raw=true)
+![source-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/4-Build-Stage-Source-Configuration-Settings.png?raw=true)
+![environment-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/5-Build-Stage-Environment-Configuration-Settings.png?raw=true)
+![buildspec-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/6-Build-Stage-Buildspec-Configuration-Settings.png?raw=true)
 ##### Note on Cache Settings
 This may not be necessary if you choose to build and deploy an application other than Spring Pet Clinic, a Spring Boot / Java project with many dependencies.  Each time the build process is executed, the build environment re-downloads all these dependencies.  This can take over 5 minutes and can get tedious while iterating or demoing the solution. The screenshots reflect the necessary configuration to cache these dependencies in an S3 bucket, thus greatly speeding up the time needed to build this particular application.
-![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/7-Build-Stage-Artifact-Configuation-Settings.png?raw=true)
+![artifact-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/7-Build-Stage-Artifact-Configuation-Settings.png?raw=true)
 * Once a build project is either created or an existing build project is selected, the Build stage configuration should look similar to this:
-![build-stage-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/3aa-Build-Stage-Completed-State.png?raw=true)
+![build-stage-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/3aa-Build-Stage-Completed-State.png?raw=true)
 
 
 #### Step 4: Setup the Pipeline's "Deploy" Stage
@@ -81,22 +81,22 @@ This step will take the application artifact created in the previous step and de
 
 * In AWS CodeDeploy, go the "Applications" interface
 
-  ![codedeploy-side-nav](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8b-code-deploy-side-nav.png?raw=true)
+  ![codedeploy-side-nav](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8b-code-deploy-side-nav.png?raw=true)
 
 * Select "Create New Application"
 * Fill in the fields to create an application:
-![application-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8c-code-deploy-application.png?raw=true)
+![application-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8c-code-deploy-application.png?raw=true)
 * Create a Deployment Group as the deployment target. In this case, we'll deploy the application executable to any EC2 instances that match the tags we specify in the Environment Configuration section. You'll know you've got things lined up correctly when the UI reports that it matched an instance:
 
-  ![deployment-group-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8d-code-deploy-deployment-group.png?raw=true)
+  ![deployment-group-config](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8d-code-deploy-deployment-group.png?raw=true)
 
 * Once this is all created, the fields in the Deploy stage should auto-populate with valid options for each field similar to the screenshot below:
 
-  ![completed-deploy-stage](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/8e-completed-deploy-stage.png?raw=true)
+  ![completed-deploy-stage](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8e-completed-deploy-stage.png?raw=true)
 
 * After the Source, Build and Deploy stages are complete you should be presented with a final review and an option to "Create Pipeline":
 
-  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/11-Pipeline-Config-Review.png?raw=true)
+  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/11-Pipeline-Config-Review.png?raw=true)
 
 Create the pipeline and move on to the next step.
 
@@ -105,7 +105,7 @@ This step will create the SNS (Simple Notification Service) topic that to which 
 
 * Head over to the AWS SNS UI, select "Topics" and click the "Create New Topic" button.  Create a topic with these values:
 
-  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/9-SNS-Topic-Settings.png?raw=true)
+  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/9-SNS-Topic-Settings.png?raw=true)
 Note the ARN of this topic.  It will be needed in the next step.
 
 #### Step 7: Update the Lambda definition to trigger on receipt of a notification on the SNS topic
@@ -131,7 +131,7 @@ Now that we have a topic created, configure the pipeline to send notifications o
 
 * In the main pipeline UI, select "Notifiy", then "Create Notification Rule".  Fill on values to reflect a configuration like this:
 
-  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/10-Pipeline-Notification-Rule.png?raw=true)
+  ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/10-Pipeline-Notification-Rule.png?raw=true)
 
 The SNS topic should auto-populate as an option in the "Choose target" field.
 
@@ -163,7 +163,7 @@ git push
 #### Step 11: Validate you have custom events in O11y Cloud
 Once the pipeline completes successfully, you should be able to search O11y for your custom events.  To do so, open up a Dashboard and look for matching events in the `Event Overlay` field or in the Event Finder panel.  Once your events are located you can set them as overlays, create a Table chart showing a list of events, etc...
 
- ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs/images/11a-o11y-cloud-events-overlay.png?raw=true)
+ ![codepipeline-review](https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/11a-o11y-cloud-events-overlay.png?raw=true)
 
 ## Optional Reading: Serverless Application Model (SAM) Technical Data
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
