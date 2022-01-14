@@ -18,6 +18,7 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+  favicon: images/favicon.ico
   include_search_page: false
   search_index_only: true
   language: en
@@ -44,3 +45,7 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - toc:
       permalink: true
+
+nav:
+  - Overview: 'overview.md'
+  - Pre-Requisites: 'pre-reqs.md'
