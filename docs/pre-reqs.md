@@ -1,5 +1,6 @@
 #### Pre-Requisites
 * Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) & [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html).
+* Create an instance role for the EC2 app server to allow it to receive CodeDeploy deployments. 
 * Create an EC2 instance to run the Spring Boot application
 ```bash
 aws ec2 run-instances \
