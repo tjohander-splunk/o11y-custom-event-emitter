@@ -8,14 +8,14 @@
       
       
       
-        <link rel="canonical" href="https://tjohander-splunk.github.io/o11y-custom-event-emitter/pre-reqs/">
+        <link rel="canonical" href="https://tjohander-splunk.github.io/o11y-custom-event-emitter/provisioning-automated/">
       
       <link rel="icon" href="../images/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
-        <title>Pre-Requisites - O11y Event Emitter</title>
+        <title>Provision AWS Resources via Automation (Recommended) - O11y Event Emitter</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pre-requisites" class="md-skip">
+        <a href="#generate-all-aws-resources-to-run-the-demo" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Pre-Requisites
+              Provision AWS Resources via Automation (Recommended)
             
           </span>
         </div>
@@ -191,12 +191,10 @@
         
   
   
-    
-  
 
 
   <li class="md-tabs__item">
-    <a href="./" class="md-tabs__link md-tabs__link--active">
+    <a href="../pre-reqs/" class="md-tabs__link">
       Pre-Requisites
     </a>
   </li>
@@ -205,13 +203,15 @@
         
   
   
+    
+  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../provisioning-automated/" class="md-tabs__link">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
         Provisioning AWS Resources
       </a>
     </li>
@@ -283,80 +283,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Pre-Requisites
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../pre-reqs/" class="md-nav__link">
         Pre-Requisites
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#aws-sam-cli" class="md-nav__link">
-    AWS &amp; SAM CLI
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#create-a-connection-between-github-and-aws" class="md-nav__link">
-    Create a Connection Between Github and AWS
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#generate-or-locate-an-ec2-ssh-keypair" class="md-nav__link">
-    Generate or Locate an EC2 SSH Keypair
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#find-a-suitable-observability-cloud-environment" class="md-nav__link">
-    Find a Suitable Observability Cloud Environment
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fork-and-clone-the-sample-application" class="md-nav__link">
-    Fork and Clone the Sample Application
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -367,12 +298,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -393,11 +326,120 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../provisioning-automated/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Provision AWS Resources via Automation (Recommended)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Provision AWS Resources via Automation (Recommended)
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-download-the-contents-of-this-repository" class="md-nav__link">
+    Step 1: Download the contents of this repository
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-build-and-deploy-the-all-required-aws-resources" class="md-nav__link">
+    Step 2: Build and Deploy the All Required AWS Resources
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Build and Deploy the All Required AWS Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-2a-initialize-the-project" class="md-nav__link">
+    Step 2a: Initialize The Project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2b-provide-values-for-each-parameter-required-to-process-the-resources" class="md-nav__link">
+    Step 2b: Provide values for each parameter required to process the resources
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-monitor-the-pipeline" class="md-nav__link">
+    Step 4: Monitor the Pipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-ensure-some-events-make-it-into-o11y" class="md-nav__link">
+    Step 5: Ensure some events make it into O11y
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Ensure some events make it into O11y">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-an-event-feed-chart" class="md-nav__link">
+    Create an Event Feed Chart
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overlay-events-on-a-different-chart" class="md-nav__link">
+    Overlay Events on a different chart
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-ready-for-demo" class="md-nav__link">
+    Step 6: Ready for Demo
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -465,36 +507,76 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#aws-sam-cli" class="md-nav__link">
-    AWS &amp; SAM CLI
+  <a href="#step-1-download-the-contents-of-this-repository" class="md-nav__link">
+    Step 1: Download the contents of this repository
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-a-connection-between-github-and-aws" class="md-nav__link">
-    Create a Connection Between Github and AWS
+  <a href="#step-2-build-and-deploy-the-all-required-aws-resources" class="md-nav__link">
+    Step 2: Build and Deploy the All Required AWS Resources
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Build and Deploy the All Required AWS Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-2a-initialize-the-project" class="md-nav__link">
+    Step 2a: Initialize The Project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2b-provide-values-for-each-parameter-required-to-process-the-resources" class="md-nav__link">
+    Step 2b: Provide values for each parameter required to process the resources
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-monitor-the-pipeline" class="md-nav__link">
+    Step 4: Monitor the Pipeline
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#generate-or-locate-an-ec2-ssh-keypair" class="md-nav__link">
-    Generate or Locate an EC2 SSH Keypair
+  <a href="#step-5-ensure-some-events-make-it-into-o11y" class="md-nav__link">
+    Step 5: Ensure some events make it into O11y
   </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Ensure some events make it into O11y">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-an-event-feed-chart" class="md-nav__link">
+    Create an Event Feed Chart
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overlay-events-on-a-different-chart" class="md-nav__link">
+    Overlay Events on a different chart
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#find-a-suitable-observability-cloud-environment" class="md-nav__link">
-    Find a Suitable Observability Cloud Environment
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fork-and-clone-the-sample-application" class="md-nav__link">
-    Fork and Clone the Sample Application
+  <a href="#step-6-ready-for-demo" class="md-nav__link">
+    Step 6: Ready for Demo
   </a>
   
 </li>
@@ -512,67 +594,73 @@
               
                 
 
-<h1 id="pre-requisites">Pre-Requisites<a class="headerlink" href="#pre-requisites" title="Permanent link">&para;</a></h1>
-<h2 id="aws-sam-cli">AWS &amp; SAM CLI<a class="headerlink" href="#aws-sam-cli" title="Permanent link">&para;</a></h2>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Install the <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">AWS CLI</a> &amp; <a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html">SAM CLI</a>.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Configure the AWS CLI with the credentials for an AWS account to which you have access:
-<div class="highlight"><pre><span></span><code>aws --configure
+<h1 id="generate-all-aws-resources-to-run-the-demo">Generate All AWS Resources to Run The Demo<a class="headerlink" href="#generate-all-aws-resources-to-run-the-demo" title="Permanent link">&para;</a></h1>
+<p>This step will use the power of the SAM and Cloudformation to automate the construction of all these resources.  Cloudformation is a very powerful Infrastrcuture-as-Code (IaC) tool.  It's recommended to use this process to build all the AWS resources.  Manually provisioning everything is time-consuming and error-prone.</p>
+<p>Let's get started!</p>
+<h2 id="step-1-download-the-contents-of-this-repository">Step 1: Download the contents of this repository<a class="headerlink" href="#step-1-download-the-contents-of-this-repository" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/tjohander-splunk/o11y-custom-event-emitter.git <span class="o">&amp;&amp;</span>
+<span class="nb">cd</span> o11y-custom-event-emitter
 </code></pre></div>
-Details on installation and configuration for the AWS CLI can be found <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html">here</a>.  Similar details for the SAM CLI can be found <a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html">here</a>.</li>
-</ul>
-<h2 id="create-a-connection-between-github-and-aws">Create a Connection Between Github and AWS<a class="headerlink" href="#create-a-connection-between-github-and-aws" title="Permanent link">&para;</a></h2>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> This step requires some manual intervention to approve a connection once you create it with the following command:
-<div class="highlight"><pre><span></span><code>aws codestar-connections create-connection <span class="se">\</span>
-    --provider-type Github <span class="se">\</span>
-    --connection-name &lt;some-artbitrary-value&gt;
-</code></pre></div></li>
-</ul>
-<p>When this is done, the connection is in a pending state and there is another step.  Log into the AWS console and update the connection state from "Pending" to "Active". Details are <a href="https://docs.aws.amazon.com/dtconsole/latest/userguide/connections-update.html">here</a>. You must use the console to update a pending connection. You cannot update a pending connection using the AWS CLI.</p>
-<p>Note the <code>ARN</code> of this resource once it's created.  You'll need it in a subsequent step.
-This connection is used in building the CI/CD pipeline but it's an account-level object and you can re-use this for anything else in AWS you'd like.  It's like a parting gift of this demo.</p>
-<h2 id="generate-or-locate-an-ec2-ssh-keypair">Generate or Locate an EC2 SSH Keypair<a class="headerlink" href="#generate-or-locate-an-ec2-ssh-keypair" title="Permanent link">&para;</a></h2>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Create an SSH KeyPair to connect to an EC2 Instance if you don't already have one.
-<div class="highlight"><pre><span></span><code>aws ec2 create-key-pair <span class="se">\</span>
-    --key-name my-key-pair <span class="se">\</span>
-    --key-type rsa <span class="se">\</span>
-    --query <span class="s2">&quot;KeyMaterial&quot;</span> <span class="se">\</span>
-    --output text &gt; my-key-pair.pem
+<h2 id="step-2-build-and-deploy-the-all-required-aws-resources">Step 2: Build and Deploy the All Required AWS Resources<a class="headerlink" href="#step-2-build-and-deploy-the-all-required-aws-resources" title="Permanent link">&para;</a></h2>
+<p>The SAM CLI is an extension to the AWS CLI and can process various files needed to deploy a serverless function and any related AWS resources.  The <code>template.yaml</code> file describes all the resources we will need for this demo.</p>
+<h3 id="step-2a-initialize-the-project">Step 2a: Initialize The Project<a class="headerlink" href="#step-2a-initialize-the-project" title="Permanent link">&para;</a></h3>
+<p>Enter this command to initialize the project app code and configuration:
+   <div class="highlight"><pre><span></span><code>sam build
+</code></pre></div></p>
+<h3 id="step-2b-provide-values-for-each-parameter-required-to-process-the-resources">Step 2b: Provide values for each parameter required to process the resources<a class="headerlink" href="#step-2b-provide-values-for-each-parameter-required-to-process-the-resources" title="Permanent link">&para;</a></h3>
+<p>Enter this command to start the deploy phase.  The <code>--guided</code> switch will take you through a series of questions asking for values to assign the parameters contained in the template.
+   <div class="highlight"><pre><span></span><code>sam deploy --guided 
 </code></pre></div>
-Whether you created one or have a pre-existing key you use to connect to EC2 instances, <strong>note the <code>key-name</code> of the key.</strong> You'll need to initialize the Cloudformation stack.</li>
-</ul>
-<h2 id="find-a-suitable-observability-cloud-environment">Find a Suitable Observability Cloud Environment<a class="headerlink" href="#find-a-suitable-observability-cloud-environment" title="Permanent link">&para;</a></h2>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Locate an Observability Cloud environment to which you will deploy custom CI/CD events.  <strong>Note the <code>realm</code> and <code>Access Token</code>.</strong></li>
-</ul>
-<h2 id="fork-and-clone-the-sample-application">Fork and Clone the Sample Application<a class="headerlink" href="#fork-and-clone-the-sample-application" title="Permanent link">&para;</a></h2>
-<ul class="task-list">
-<li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Fork and clone the repository at <code>https://github.com/tjohander-splunk/spring-petclinic</code>.
-  If you are familiar with Git, this should be quite easy.  If you've never forked or cloned a repository, detailed instructions can be found <a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository">here</a>
-<div class="highlight"><pre><span></span><code>git clone &lt;your-fork-repo-url&gt;
+This command will walk you through setting values for the required parameter values for the various AWS resources.  If there are defaults found in the config file, you can hit <code>enter</code> to use them.  Details on how to answer each question are provided in the comments above each question
+<div class="highlight"><pre><span></span><code><span class="c1"># Pick anything you want here</span>
+Stack Name <span class="o">[</span>sam-app-observability-demo<span class="o">]</span>:
+<span class="c1"># The region you specificy in your AWS CLI Config</span>
+AWS Region <span class="o">[</span>us-east-2<span class="o">]</span>:
+<span class="c1"># The o11y realm to send events</span>
+Parameter Realm <span class="o">[</span>us0<span class="o">]</span>:
+<span class="c1"># an access token for this o11y environment </span>
+Parameter AccessToken:
+<span class="c1"># the SSH keypair you own to connect to EC2 instances</span>
+Parameter KeyName <span class="o">[</span>tj-devlab-key-pair-001<span class="o">]</span>:
+<span class="c1"># default is fine</span>
+Parameter InstanceType <span class="o">[</span>t2.small<span class="o">]</span>:
+<span class="c1"># if you want to lock down SSH to single source IP</span>
+Parameter SSHLocation <span class="o">[</span><span class="m">0</span>.0.0.0/0<span class="o">]</span>:
+<span class="c1"># the repo of the sample project</span>
+Parameter GitHubRepo <span class="o">[</span>tjohander-splunk/spring-petclinic<span class="o">]</span>:
+<span class="c1"># the Github/AWS Connection ARN</span>
+Parameter GitHubConnectionARN <span class="o">[</span>arn:aws:codestar-connections:us-east-2:455790677231:connection/aaeb5a4f-b91f-4655-a234-e3ff4c8d1176<span class="o">]</span>:
+<span class="c1"># An arbitrary prefix to all custom events. Please add something to make here your events easy to find.</span>
+Parameter EventType <span class="o">[</span>TSJ CI-CD Pipeline Event<span class="o">]</span>:
+<span class="c1">#Shows you resources changes to be deployed and require a &#39;Y&#39; to initiate deploy</span>
+Confirm changes before deploy <span class="o">[</span>Y/n<span class="o">]</span>: 
+<span class="c1">#SAM needs permission to be able to create roles to connect to the resources in your template</span>
+Allow SAM CLI IAM role creation <span class="o">[</span>Y/n<span class="o">]</span>: 
+<span class="c1">#Preserves the state of previously provisioned resources when an operation fails</span>
+Disable rollback <span class="o">[</span>Y/n<span class="o">]</span>: &lt;default is fine&gt;
+Save arguments to configuration file <span class="o">[</span>Y/n<span class="o">]</span>: &lt;default is fine&gt;
+SAM configuration file <span class="o">[</span>samconfig.toml<span class="o">]</span>: &lt;default is fine&gt;
+SAM configuration environment <span class="o">[</span>default<span class="o">]</span>: &lt;default is fine&gt;
 </code></pre></div>
-For the purposes of this demo we will use <a href="https://github.com/tjohander-splunk/spring-petclinic">this</a> Java/Spring Boot application.
-The actual application code is unchanged from the classic Spring authored application, but does include some additional files that AWS CodePipeline needs for this CI/CD workflow to execute properly. <strong>Note your Github <code>org</code> and <code>repository</code> values.  They will be needed in a subsequent step.</strong></p>
-</li>
-<li>
-<p>Create an instance role for the EC2 app server to allow it to receive CodeDeploy deployments. </p>
-</li>
-<li>Create an EC2 instance to run the Spring Boot application
-<div class="highlight"><pre><span></span><code>aws ec2 run-instances <span class="se">\</span>
---image-id ami-002068ed284fb165b <span class="se">\</span>
---count <span class="m">1</span> <span class="se">\</span>
---instance-type t2.micro <span class="se">\</span>
---key-name &lt;a valid AWS key pair to which you have access&gt; <span class="se">\</span>
---security-group-ids &lt;a security group with SSH and TCP <span class="m">8080</span> open from any ip&gt; <span class="se">\</span>
---associate-public-ip-address <span class="se">\</span>
---user-data <span class="k">$(</span>curl https://raw.githubusercontent.com/tjohander-splunk/aws-one-liners/main/user-data-scripts/spring-boot-app-server.sh <span class="p">|</span> base64<span class="k">)</span> <span class="se">\</span>
---tag-specifications <span class="s1">&#39;ResourceType=instance,Tags=[{Key=application,Value=Spring-Pet-Clinic}]&#39;</span>
-</code></pre></div></li>
-<li>Fork and Clone the Spring Boot Pet Clinic <a href="https://github.com/tjohander-splunk/spring-petclinic">App and supporting AWS CodeDeploy files</a></li>
+Once a changeSet is created, go ahead and run it.  There will be quite a bit of information output to your terminal, go ahead and follow the prompts to deploy all the AWS resources.  If issues pop up, do your best to remediate or hit me up on Slack ("Tom Johander") or email ("tjohander@splunk.com") </p>
+<h2 id="step-4-monitor-the-pipeline">Step 4: Monitor the Pipeline<a class="headerlink" href="#step-4-monitor-the-pipeline" title="Permanent link">&para;</a></h2>
+<p>As the process goes down, the initial run of the pipeline will kick off.  It's all automatic and you can watch the pipeline run on the AWS Console.  Go to the CodePipeline "Pipelines" UI and click the name of the pipeline that's created.  As each step and each stage start, succeed or fail, a notification is sent to the Lambda function defined in the <code>app.js</code> file in this repo.  This is what's sending pipeline events to Observability cloud...so let's go take a look! </p>
+<p><em>Note: The first time the pipeline runs, it's takes about 6 to 7 minutes to complete.  This is due to all the dependencies of the sample app needing to be downloaded.  There is some caching built into the pipeline, so subsequent runs of the pipeline should take about 45 seconds to finish.</em></p>
+<h2 id="step-5-ensure-some-events-make-it-into-o11y">Step 5: Ensure some events make it into O11y<a class="headerlink" href="#step-5-ensure-some-events-make-it-into-o11y" title="Permanent link">&para;</a></h2>
+<p>Jump into your O11y environment and open a dashboard.</p>
+<h3 id="create-an-event-feed-chart">Create an Event Feed Chart<a class="headerlink" href="#create-an-event-feed-chart" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Open the "Event Feed" and select the "Find Events" radio button
+Search with the name prefix you set during the <code>sam deploy --guided</code> questionnaire.
+Select "Add Single Chart"</li>
 </ul>
+<h3 id="overlay-events-on-a-different-chart">Overlay Events on a different chart<a class="headerlink" href="#overlay-events-on-a-different-chart" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> In the top bar of the dashboard, find and select your custom event type in the "Event Overlay" field.
+This will overlay custom events on the X-axis of any time chart that's appropriate.</li>
+</ul>
+<h2 id="step-6-ready-for-demo">Step 6: Ready for Demo<a class="headerlink" href="#step-6-ready-for-demo" title="Permanent link">&para;</a></h2>
+<p>If everything looks good at this point, you should be ready to deliver a great demo</p>
 
               
             </article>
@@ -591,7 +679,7 @@ The actual application code is unchanged from the classic Spring authored applic
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../overview/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview" rel="prev">
+        <a href="../pre-reqs/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Pre-Requisites" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -600,20 +688,20 @@ The actual application code is unchanged from the classic Spring authored applic
               <span class="md-footer__direction">
                 Previous
               </span>
-              Overview
+              Pre-Requisites
             </div>
           </div>
         </a>
       
       
         
-        <a href="../provisioning-automated/" class="md-footer__link md-footer__link--next" aria-label="Next: Provision AWS Resources via Automation (Recommended)" rel="next">
+        <a href="../provisioning-manual/" class="md-footer__link md-footer__link--next" aria-label="Next: Provision AWS Resources (Not Recommended)" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Provision AWS Resources via Automation (Recommended)
+              Provision AWS Resources (Not Recommended)
             </div>
           </div>
           <div class="md-footer__button md-icon">

@@ -8,14 +8,14 @@
       
       
       
-        <link rel="canonical" href="https://tjohander-splunk.github.io/o11y-custom-event-emitter/overview/">
+        <link rel="canonical" href="https://tjohander-splunk.github.io/o11y-custom-event-emitter/execute-demo/">
       
       <link rel="icon" href="../images/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
-        <title>Overview - O11y Event Emitter</title>
+        <title>Execute the Demo - O11y Event Emitter</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#custom-observability-event-emitter-for-aws-codepipeline-cicd" class="md-skip">
+        <a href="#this-is-where-the-fun-starts" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview
+              Execute the Demo
             
           </span>
         </div>
@@ -179,12 +179,10 @@
         
   
   
-    
-  
 
 
   <li class="md-tabs__item">
-    <a href="./" class="md-tabs__link md-tabs__link--active">
+    <a href="../overview/" class="md-tabs__link">
       Overview
     </a>
   </li>
@@ -221,10 +219,12 @@
         
   
   
+    
+  
 
 
   <li class="md-tabs__item">
-    <a href="../execute-demo/" class="md-tabs__link">
+    <a href="./" class="md-tabs__link md-tabs__link--active">
       Execute the Demo
     </a>
   </li>
@@ -268,72 +268,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Overview
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
         Overview
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    Overview
-  </a>
-  
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-workflow" class="md-nav__link">
-    The Workflow
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#implementation-details" class="md-nav__link">
-    Implementation Details
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -421,11 +360,48 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../execute-demo/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Execute the Demo
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Execute the Demo
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#this-is-where-the-fun-starts" class="md-nav__link">
+    This is where the fun starts
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -447,8 +423,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -457,29 +431,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    Overview
+  <a href="#this-is-where-the-fun-starts" class="md-nav__link">
+    This is where the fun starts
   </a>
-  
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-workflow" class="md-nav__link">
-    The Workflow
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#implementation-details" class="md-nav__link">
-    Implementation Details
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -496,38 +450,9 @@
               
                 
 
-<h1 id="custom-observability-event-emitter-for-aws-codepipeline-cicd">Custom Observability Event Emitter for AWS Codepipeline CI/CD<a class="headerlink" href="#custom-observability-event-emitter-for-aws-codepipeline-cicd" title="Permanent link">&para;</a></h1>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>This Demo is intended to show the capabilities of Splunk Observability Cloud's custom event capabilities.  It demonstrates how a popular Continuous Integration / Continuous Deployment (CI/CD) Workflow can be adapted to send valuable information into Observability Cloud to correlate application release events with specific infrastructure, application and business performance metrics. </p>
-<h3 id="the-workflow">The Workflow<a class="headerlink" href="#the-workflow" title="Permanent link">&para;</a></h3>
-<p>The workflow in this demo involves a typical process by which software development teams create and maintain projects.</p>
-<ol>
-<li>Code is continually updated by developers using a central version control system (VCS). In this case a sample Github repository is used, but Bitbucket or AWS CodeCommit are alternatives that would also work. </li>
-<li>
-<p>When the main branch is updated, AWS CodePipeline takes over to:</p>
-<ul>
-<li>Download the latest code.</li>
-<li>Run automated tests on the source code.</li>
-<li>Compile and build any supporting artifacts</li>
-<li>Deploy the finished artifacts into QA, staging or production runtime environments to deliver the value for which they were created.</li>
-</ul>
-</li>
-<li>
-<p>Each of these stages should be automated to allow software teams to focus on the quality of the code, not the mechanics of deploying and running it.  This is the foundation of a modern DevOps paradigm.   </p>
-</li>
-</ol>
-<p>The challenges this process can present to many customers is how to correlate a CI/CD workflow ("pipeline") like this to environment health or business objectives. It's incredibly useful to be able to quickly and painlessly correlate software release events with other health metrics to quickly identify issues in a new release or impact on business objectives.  This is where Splunk Observability's capabilities to accept custom events and overlay display them on other charts and dashboards is invaluable.  </p>
-<p>This demo will walk you through exactly how to do that.</p>
-<h3 id="implementation-details">Implementation Details<a class="headerlink" href="#implementation-details" title="Permanent link">&para;</a></h3>
-<p>The technical details of this demo features out-of-the-box capabilities in a Github &amp; AWS-based workflow, although it could be adapted to use a different Version Control System (BitBucket, CodeCommit) or Continuous Delivery platform (Jenkins, Cloudbees, CircleCI).  </p>
-<ol>
-<li>A connection is configured between a Github repository &amp; AWS Codepipeline.</li>
-<li>When changes on a watched branch are committed to Github, AWS Codepipeline takes over to pull the source code.  A notification of this event is published to the SNS Topic</li>
-<li>The Lambda function has a subscription to the notification topic and is invoked with the payload of the message as the function's input.</li>
-<li>The function creates a simple HTTP <code>POST</code> payload that's sent to the Observability <code>Ingest</code> API.  The payload is designed to carry some details about the Codepipeline event that invoked the function.</li>
-<li>At each subsequent stage in the Codepipeline process, the same process repeats itself.</li>
-<li>Once these events arrive in Observability Cloud, they can be added as event overlays on various Charts and Dashboard elements, as well as represented as Table or Counter charts.  The possibilities are endless <img alt="😄" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f604.svg" title=":smile:" /></li>
-</ol>
+  <h1>Execute the Demo</h1>
+
+<h3 id="this-is-where-the-fun-starts">This is where the fun starts<a class="headerlink" href="#this-is-where-the-fun-starts" title="Permanent link">&para;</a></h3>
 
               
             </article>
@@ -545,21 +470,21 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-      
         
-        <a href="../pre-reqs/" class="md-footer__link md-footer__link--next" aria-label="Next: Pre-Requisites" rel="next">
+        <a href="../provisioning-manual/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Provision AWS Resources (Not Recommended)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
-                Next
+                Previous
               </span>
-              Pre-Requisites
+              Provision AWS Resources (Not Recommended)
             </div>
           </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
         </a>
+      
       
     </nav>
   

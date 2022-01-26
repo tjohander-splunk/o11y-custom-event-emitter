@@ -1,0 +1,824 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://tjohander-splunk.github.io/o11y-custom-event-emitter/provisioning-manual/">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
+    
+    
+      
+        <title>Provision AWS Resources (Not Recommended) - O11y Event Emitter</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6e60f8b8.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Century+Gothic:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Century Gothic";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pre-requisites" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="O11y Event Emitter" class="md-header__button md-logo" aria-label="O11y Event Emitter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            O11y Event Emitter
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Provision AWS Resources (Not Recommended)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../overview/" class="md-tabs__link">
+      Overview
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../pre-reqs/" class="md-tabs__link">
+      Pre-Requisites
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../provisioning-automated/" class="md-tabs__link md-tabs__link--active">
+        Provisioning AWS Resources
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../execute-demo/" class="md-tabs__link">
+      Execute the Demo
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="O11y Event Emitter" class="md-nav__button md-logo" aria-label="O11y Event Emitter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    O11y Event Emitter
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pre-reqs/" class="md-nav__link">
+        Pre-Requisites
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Provisioning AWS Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Provisioning AWS Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Provisioning AWS Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../provisioning-automated/" class="md-nav__link">
+        Provision AWS Resources via Automation (Recommended)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Provision AWS Resources (Not Recommended)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Provision AWS Resources (Not Recommended)
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-requisites" class="md-nav__link">
+    Pre-Requisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-create-a-new-pipeline" class="md-nav__link">
+    Step 1: Create a New Pipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-connect-github-to-your-aws-account" class="md-nav__link">
+    Step 2: Connect Github to your AWS Account
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-setup-the-pipelines-build-stage" class="md-nav__link">
+    3: Setup the Pipeline's "Build" Stage
+  </a>
+  
+    <nav class="md-nav" aria-label="3: Setup the Pipeline's "Build" Stage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note-on-cache-settings" class="md-nav__link">
+    Note on Cache Settings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-setup-the-pipelines-deploy-stage" class="md-nav__link">
+    Step 4: Setup the Pipeline's "Deploy" Stage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-create-sns-topic" class="md-nav__link">
+    Step 5: Create SNS Topic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-update-the-lambda-definition-to-trigger-on-receipt-of-a-notification-on-the-sns-topic" class="md-nav__link">
+    Step 7: Update the Lambda definition to trigger on receipt of a notification on the SNS topic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-create-notification-rule-for-the-codepipeline" class="md-nav__link">
+    Step 8: Create Notification Rule For The CodePipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9-deploy-the-lambda-function-with-the-sam-cli" class="md-nav__link">
+    Step 9: Deploy the Lambda function with the SAM CLI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-10-push-a-small-change-to-the-source-application-code-to-trigger-a-pipeline-execution" class="md-nav__link">
+    Step 10: Push a small change to the source application code to trigger a pipeline execution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-11-validate-you-have-custom-events-in-o11y-cloud" class="md-nav__link">
+    Step 11: Validate you have custom events in O11y Cloud
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../execute-demo/" class="md-nav__link">
+        Execute the Demo
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-requisites" class="md-nav__link">
+    Pre-Requisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-create-a-new-pipeline" class="md-nav__link">
+    Step 1: Create a New Pipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-connect-github-to-your-aws-account" class="md-nav__link">
+    Step 2: Connect Github to your AWS Account
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-setup-the-pipelines-build-stage" class="md-nav__link">
+    3: Setup the Pipeline's "Build" Stage
+  </a>
+  
+    <nav class="md-nav" aria-label="3: Setup the Pipeline's "Build" Stage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note-on-cache-settings" class="md-nav__link">
+    Note on Cache Settings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-setup-the-pipelines-deploy-stage" class="md-nav__link">
+    Step 4: Setup the Pipeline's "Deploy" Stage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-create-sns-topic" class="md-nav__link">
+    Step 5: Create SNS Topic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-update-the-lambda-definition-to-trigger-on-receipt-of-a-notification-on-the-sns-topic" class="md-nav__link">
+    Step 7: Update the Lambda definition to trigger on receipt of a notification on the SNS topic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-create-notification-rule-for-the-codepipeline" class="md-nav__link">
+    Step 8: Create Notification Rule For The CodePipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9-deploy-the-lambda-function-with-the-sam-cli" class="md-nav__link">
+    Step 9: Deploy the Lambda function with the SAM CLI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-10-push-a-small-change-to-the-source-application-code-to-trigger-a-pipeline-execution" class="md-nav__link">
+    Step 10: Push a small change to the source application code to trigger a pipeline execution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-11-validate-you-have-custom-events-in-o11y-cloud" class="md-nav__link">
+    Step 11: Validate you have custom events in O11y Cloud
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+  <h1>Provision AWS Resources (Not Recommended)</h1>
+
+<h3 id="pre-requisites">Pre-Requisites<a class="headerlink" href="#pre-requisites" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Install the <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">AWS CLI</a> &amp; <a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html">SAM CLI</a>.</li>
+<li>Create an EC2 instance to run the Spring Boot application
+<div class="highlight"><pre><span></span><code>aws ec2 run-instances <span class="se">\</span>
+--image-id ami-002068ed284fb165b <span class="se">\</span>
+--count <span class="m">1</span> <span class="se">\</span>
+--instance-type t2.micro <span class="se">\</span>
+--key-name &lt;a valid AWS key pair to which you have access&gt; <span class="se">\</span>
+--security-group-ids &lt;a security group with SSH and TCP <span class="m">8080</span> open from any ip&gt; <span class="se">\</span>
+--associate-public-ip-address <span class="se">\</span>
+--user-data <span class="k">$(</span>curl https://raw.githubusercontent.com/tjohander-splunk/aws-one-liners/main/user-data-scripts/spring-boot-app-server.sh <span class="p">|</span> base64<span class="k">)</span> <span class="se">\</span>
+--tag-specifications <span class="s1">&#39;ResourceType=instance,Tags=[{Key=application,Value=Spring-Pet-Clinic}]&#39;</span>
+</code></pre></div></li>
+<li>Fork and Clone the Spring Boot Pet Clinic <a href="https://github.com/tjohander-splunk/spring-petclinic">App and supporting AWS CodeDeploy files</a></li>
+</ul>
+<h3 id="step-1-create-a-new-pipeline">Step 1: Create a New Pipeline<a class="headerlink" href="#step-1-create-a-new-pipeline" title="Permanent link">&para;</a></h3>
+<p>In the AWS Console, head to the CodePipeline service and click "Create Pipeline".  The role name that AWS creates on your behalf will include the name you give to the pipeline.</p>
+<p><img alt="image" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/1-Codepipeline-Settings.png?raw=true" /></p>
+<p>Click "Next"</p>
+<h3 id="step-2-connect-github-to-your-aws-account">Step 2: Connect Github to your AWS Account<a class="headerlink" href="#step-2-connect-github-to-your-aws-account" title="Permanent link">&para;</a></h3>
+<p>This only needs to be done once.  The result is an AWS resource that is not directly tied to this demo.</p>
+<ul>
+<li>Select Github (Version 2) as your Source Provider</li>
+<li>Click "Connect to Github"</li>
+<li>You'll be prompted to create a Connection Name:
+  <img alt="connection-example-1" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/2c-github-connection-popup.png?raw=true" /></li>
+<li>Then you'll be asked to sign in to Github:
+  <img alt="github-login" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/2d-sign-in-to-github.png?raw=true" /></li>
+<li>The Github Connection should be created and its ARN added to the Source configuration. Complete the fields for the Github repository and branch you want this pipeline to watch:
+  <img alt="source-settings" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/2-Source-Stage-Settings.png?raw=true" /></li>
+</ul>
+<h3 id="3-setup-the-pipelines-build-stage">3: Setup the Pipeline's "Build" Stage<a class="headerlink" href="#3-setup-the-pipelines-build-stage" title="Permanent link">&para;</a></h3>
+<p>This stage will receive the application source code and execute the steps needed to build the application: download dependencies, compile the source code,
+run any unit &amp; integration tests and any other tasks needed to convert the source code into a runnable application that can be deployed to an application
+server or other runtime environment.
+* For the Build Provider, select "AWS CodeBuild" and select the region in which you want this build to be executed
+* Click "Create Build Project".  You'll be presented with a popup to configure a new Build project.</p>
+<p>Apply settings similar to the following:
+<img alt="project-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/3-Build-Stage-ProjectConfiguration-Settings.png?raw=true" />
+<img alt="source-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/4-Build-Stage-Source-Configuration-Settings.png?raw=true" />
+<img alt="environment-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/5-Build-Stage-Environment-Configuration-Settings.png?raw=true" />
+<img alt="buildspec-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/6-Build-Stage-Buildspec-Configuration-Settings.png?raw=true" /></p>
+<h5 id="note-on-cache-settings">Note on Cache Settings<a class="headerlink" href="#note-on-cache-settings" title="Permanent link">&para;</a></h5>
+<p>This may not be necessary if you choose to build and deploy an application other than Spring Pet Clinic, a Spring Boot / Java project with many dependencies.  Each time the build process is executed, the build environment re-downloads all these dependencies.  This can take over 5 minutes and can get tedious while iterating or demoing the solution. The screenshots reflect the necessary configuration to cache these dependencies in an S3 bucket, thus greatly speeding up the time needed to build this particular application.
+<img alt="artifact-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/7-Build-Stage-Artifact-Configuation-Settings.png?raw=true" />
+* Once a build project is either created or an existing build project is selected, the Build stage configuration should look similar to this:
+  <img alt="build-stage-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/3aa-Build-Stage-Completed-State.png?raw=true" /></p>
+<h3 id="step-4-setup-the-pipelines-deploy-stage">Step 4: Setup the Pipeline's "Deploy" Stage<a class="headerlink" href="#step-4-setup-the-pipelines-deploy-stage" title="Permanent link">&para;</a></h3>
+<p>This step will take the application artifact created in the previous step and deploy it to an EC2 instance. In order to complete the configuration for this stage, we must first create a CodeDeploy Application resource and a Deployment Group for that application.</p>
+<ul>
+<li>In AWS CodeDeploy, go the "Applications" interface</li>
+</ul>
+<p><img alt="codedeploy-side-nav" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8b-code-deploy-side-nav.png?raw=true" /></p>
+<ul>
+<li>Select "Create New Application"</li>
+<li>Fill in the fields to create an application:
+  <img alt="application-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8c-code-deploy-application.png?raw=true" /></li>
+<li>Create a Deployment Group as the deployment target. In this case, we'll deploy the application executable to any EC2 instances that match the tags we specify in the Environment Configuration section. You'll know you've got things lined up correctly when the UI reports that it matched an instance:</li>
+</ul>
+<p><img alt="deployment-group-config" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8d-code-deploy-deployment-group.png?raw=true" /></p>
+<ul>
+<li>Once this is all created, the fields in the Deploy stage should auto-populate with valid options for each field similar to the screenshot below:</li>
+</ul>
+<p><img alt="completed-deploy-stage" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/8e-completed-deploy-stage.png?raw=true" /></p>
+<ul>
+<li>After the Source, Build and Deploy stages are complete you should be presented with a final review and an option to "Create Pipeline":</li>
+</ul>
+<p><img alt="codepipeline-review" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/11-Pipeline-Config-Review.png?raw=true" /></p>
+<p>Create the pipeline and move on to the next step.</p>
+<h3 id="step-5-create-sns-topic">Step 5: Create SNS Topic<a class="headerlink" href="#step-5-create-sns-topic" title="Permanent link">&para;</a></h3>
+<p>This step will create the SNS (Simple Notification Service) topic that to which the Lambda function will subscribe.</p>
+<ul>
+<li>Head over to the AWS SNS UI, select "Topics" and click the "Create New Topic" button.  Create a topic with these values:</li>
+</ul>
+<p><img alt="codepipeline-review" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/9-SNS-Topic-Settings.png?raw=true" />
+  Note the ARN of this topic.  It will be needed in the next step.</p>
+<h3 id="step-7-update-the-lambda-definition-to-trigger-on-receipt-of-a-notification-on-the-sns-topic">Step 7: Update the Lambda definition to trigger on receipt of a notification on the SNS topic<a class="headerlink" href="#step-7-update-the-lambda-definition-to-trigger-on-receipt-of-a-notification-on-the-sns-topic" title="Permanent link">&para;</a></h3>
+<ul>
+<li>In the <code>template.yaml</code> file located in the root of this project, fill in the topic ARN here:
+  <div class="highlight"><pre><span></span><code><span class="nt">Resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">O11yEventEmitterFunction</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS::Serverless::Function</span><span class="w"> </span><span class="c1"># More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction</span><span class="w"></span>
+<span class="w">    </span><span class="nt">Properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">CodeUri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">o11y-event-emitter/</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Handler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.lambdaHandler</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nodejs12.x</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Architectures</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x86_64</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Events</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">HelloWorld</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SNS</span><span class="w"></span>
+<span class="w">          </span><span class="nt">Properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">Topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;insert-arn-here&gt;</span><span class="w"> </span>
+</code></pre></div></li>
+</ul>
+<h3 id="step-8-create-notification-rule-for-the-codepipeline">Step 8: Create Notification Rule For The CodePipeline<a class="headerlink" href="#step-8-create-notification-rule-for-the-codepipeline" title="Permanent link">&para;</a></h3>
+<p>Now that we have a topic created, configure the pipeline to send notifications of various events to the SNS topic.</p>
+<ul>
+<li>In the main pipeline UI, select "Notifiy", then "Create Notification Rule".  Fill on values to reflect a configuration like this:</li>
+</ul>
+<p><img alt="codepipeline-review" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/10-Pipeline-Notification-Rule.png?raw=true" /></p>
+<p>The SNS topic should auto-populate as an option in the "Choose target" field.</p>
+<p>That's it! The pipeline is complete.  Now we will need to deploy our Lambda function and then test everything out by pushing a small change to the application to kick off the pipeline.</p>
+<h3 id="step-9-deploy-the-lambda-function-with-the-sam-cli">Step 9: Deploy the Lambda function with the SAM CLI<a class="headerlink" href="#step-9-deploy-the-lambda-function-with-the-sam-cli" title="Permanent link">&para;</a></h3>
+<ul>
+<li>From a terminal instance with the SAM CLI installed and configured, execute the following commands:
+   <div class="highlight"><pre><span></span><code>sam build
+</code></pre></div>
+   <div class="highlight"><pre><span></span><code>sam deploy --guided --parameter-overrides <span class="nv">Realm</span><span class="o">=</span>&lt;o11y cloud realm&gt; <span class="nv">AccessToken</span><span class="o">=</span>&lt;o11y cloud access token&gt; 
+</code></pre></div></li>
+</ul>
+<h3 id="step-10-push-a-small-change-to-the-source-application-code-to-trigger-a-pipeline-execution">Step 10: Push a small change to the source application code to trigger a pipeline execution<a class="headerlink" href="#step-10-push-a-small-change-to-the-source-application-code-to-trigger-a-pipeline-execution" title="Permanent link">&para;</a></h3>
+<p>Any change to the source code in the repository will trigger a change.  You can even just edit the README.md file in the root of the project.  It's nice to show an acutal change to the application, so maybe editing the welcome message that's presented to users on the landing page of the web app is something we want to do.</p>
+<p>It's easy to make the change, simply open the file located at <code>src/main/resources/messages/messages.properties</code>
+and edit the <code>welcome</code> message.  This text is immediately visible on the landing page and demonstrates that the application code has indeed changed and been deployed to a functional runtime environment.</p>
+<p>Once you edit the file execute standard <code>git</code> commands to push your change to Github:</p>
+<div class="highlight"><pre><span></span><code>git add .
+git commit -m <span class="s2">&quot;Updated the welcome message&quot;</span>
+git push
+</code></pre></div>
+<h3 id="step-11-validate-you-have-custom-events-in-o11y-cloud">Step 11: Validate you have custom events in O11y Cloud<a class="headerlink" href="#step-11-validate-you-have-custom-events-in-o11y-cloud" title="Permanent link">&para;</a></h3>
+<p>Once the pipeline completes successfully, you should be able to search O11y for your custom events.  To do so, open up a Dashboard and look for matching events in the <code>Event Overlay</code> field or in the Event Finder panel.  Once your events are located you can set them as overlays, create a Table chart showing a list of events, etc...</p>
+<p><img alt="codepipeline-review" src="https://github.com/tjohander-splunk/o11y-custom-event-emitter/blob/main/docs-readme/images/11a-o11y-cloud-events-overlay.png?raw=true" /></p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../provisioning-automated/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Provision AWS Resources via Automation (Recommended)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Provision AWS Resources via Automation (Recommended)
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../execute-demo/" class="md-footer__link md-footer__link--next" aria-label="Next: Execute the Demo" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Execute the Demo
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.960e086b.min.js"></script>
+      
+    
+  </body>
+</html>

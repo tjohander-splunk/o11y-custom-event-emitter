@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://tjohander-splunk.github.io/spring-petclinic-kotlin/</loc>
-         <lastmod>2022-01-14</lastmod>
+         <loc>https://tjohander-splunk.github.io/o11y-custom-event-emitter/</loc>
+         <lastmod>2022-01-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://tjohander-splunk.github.io/spring-petclinic-kotlin/overview/</loc>
-         <lastmod>2022-01-14</lastmod>
+         <loc>https://tjohander-splunk.github.io/o11y-custom-event-emitter/execute-demo/</loc>
+         <lastmod>2022-01-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://tjohander-splunk.github.io/spring-petclinic-kotlin/pre-reqs/</loc>
-         <lastmod>2022-01-14</lastmod>
+         <loc>https://tjohander-splunk.github.io/o11y-custom-event-emitter/overview/</loc>
+         <lastmod>2022-01-26</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://tjohander-splunk.github.io/o11y-custom-event-emitter/pre-reqs/</loc>
+         <lastmod>2022-01-26</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://tjohander-splunk.github.io/o11y-custom-event-emitter/provisioning-automated/</loc>
+         <lastmod>2022-01-26</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://tjohander-splunk.github.io/o11y-custom-event-emitter/provisioning-manual/</loc>
+         <lastmod>2022-01-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
