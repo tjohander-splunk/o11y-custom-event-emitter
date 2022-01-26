@@ -137,6 +137,10 @@ Resources:
         - Effect: Allow
           Action: '*'
           Resource: '*'
+        - Effect: Allow
+          Action: codestar-connections:UseConnection
+          Resource:
+            Ref: GitHubConnectionARN
       Roles:
       - Ref: RootRole
   RootInstanceProfile:
@@ -195,7 +199,7 @@ Resources:
         Ref: RootInstanceProfile
       Tags:
       - Key: application
-        Value: O11y Demo
+        Value: Buttercup-Pet-Clinic
       UserData: IyEvYmluL2Jhc2gKU0VSVklDRV9OQU1FPSdzcHJpbmctcGV0LWNsaW5pYy5zZXJ2aWNlJwpBUFBfRElSPSdzcHJpbmctcGV0LWNsaW5pYycKSkFSX0RJUj0ndGFyZ2V0JwpKQVJfRklMRV9OQU1FPSdzcHJpbmctcGV0Y2xpbmljLTIuNC41LmphcicKIyBSZWZlciB0byByZWdpb24tc3BlY2lmaWMgdmFsdWVzIGhlcmU6IGh0dHBzOi8vZG9jcy5hd3MuYW1hem9uLmNvbS9jb2RlZGVwbG95L2xhdGVzdC91c2VyZ3VpZGUvcmVzb3VyY2Uta2l0Lmh0bWwjcmVzb3VyY2Uta2l0LWJ1Y2tldC1uYW1lcwpDT0RFREVQTE9ZX0FHRU5UX0JVQ0tFVF9OQU1FPSdhd3MtY29kZWRlcGxveS11cy1lYXN0LTInCkNPREVERVBMT1lfQUdFTlRfUkVHSU9OX0lERU5USUZJRVI9J3VzLWVhc3QtMicKCnl1bSB1cGRhdGUgLXkKeXVtIGluc3RhbGwgcnVieSB3Z2V0IC15CgojIEluc3RhbGwgSmF2YSAxMQphbWF6b24tbGludXgtZXh0cmFzIGluc3RhbGwgamF2YS1vcGVuamRrMTEgLXkKCiMgSW5zdGFsbCBDb2RlRGVwbG95IEFnZW50LiAgRGV0YWlscyBoZXJlOiBodHRwczovL2RvY3MuYXdzLmFtYXpvbi5jb20vY29kZWRlcGxveS9sYXRlc3QvdXNlcmd1aWRlL2NvZGVkZXBsb3ktYWdlbnQtb3BlcmF0aW9ucy1pbnN0YWxsLWxpbnV4Lmh0bWwKI0NPREVERVBMT1lfQklOPSIvb3B0L2NvZGVkZXBsb3ktYWdlbnQvYmluL2NvZGVkZXBsb3ktYWdlbnQiCiMkQ09ERURFUExPWV9CSU4gc3RvcAojeXVtIGVyYXNlIGNvZGVkZXBsb3ktYWdlbnQgLXkKY2QgL2hvbWUvZWMyLXVzZXIKd2dldCBodHRwczovL2F3cy1jb2RlZGVwbG95LXVzLWVhc3QtMi5zMy51cy1lYXN0LTIuYW1hem9uYXdzLmNvbS9sYXRlc3QvaW5zdGFsbApjaG1vZCAreCAuL2luc3RhbGwKLi9pbnN0YWxsIGF1dG8KCiMgU2V0dXAgU3lzdGVtZCB0byBydW4gdGhlIFNwcmluZyBCb290IGFwcCBhcyBzZXJ2aWNlCmNhdCA+L2V0Yy9zeXN0ZW1kL3N5c3RlbS9zcHJpbmctcGV0LWNsaW5pYy5zZXJ2aWNlIDw8RU9MCltVbml0XQpEZXNjcmlwdGlvbj13ZWJzZXJ2ZXIgRGFlbW9uCgpbU2VydmljZV0KRXhlY1N0YXJ0PSAvdXNyL2Jpbi9qYXZhIC1qYXIgL2hvbWUvZWMyLXVzZXIvc3ByaW5nLXBldC1jbGluaWMvdGFyZ2V0L3NwcmluZy1wZXRjbGluaWMtMi40LjUuamFyCgpbSW5zdGFsbF0KV2FudGVkQnk9bXVsdGktdXNlci50YXJnZXQKRU9MCnN5c3RlbWN0bCBlbmFibGUgc3ByaW5nLXBldC1jbGluaWMuc2VydmljZQ==
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -211,6 +215,11 @@ Resources:
       - IpProtocol: tcp
         FromPort: '8080'
         ToPort: '8080'
+        CidrIp:
+          Ref: SSHLocation
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
         CidrIp:
           Ref: SSHLocation
   CodeBuildProject:
@@ -230,7 +239,7 @@ Resources:
         Image: aws/codebuild/amazonlinux2-x86_64-standard:2.0
         ImagePullCredentialsType: CODEBUILD
         Type: LINUX_CONTAINER
-      Name: O11yDemo
+      Name: Buttercup-Pet-Clinic
       QueuedTimeoutInMinutes: 5
       ServiceRole:
         Fn::GetAtt:
@@ -242,17 +251,17 @@ Resources:
   CodeDeployApplication:
     Type: AWS::CodeDeploy::Application
     Properties:
-      ApplicationName: O11yDemo
+      ApplicationName: Buttercup-Pet-Clinic
       ComputePlatform: Server
   CodeDeployDeploymentGroup:
     Type: AWS::CodeDeploy::DeploymentGroup
     Properties:
-      ApplicationName: O11yDemo
-      DeploymentGroupName: O11yDemo
+      ApplicationName: Buttercup-Pet-Clinic
+      DeploymentGroupName: Buttercup-Pet-Clinic
       DeploymentConfigName: CodeDeployDefault.AllAtOnce
       Ec2TagFilters:
       - Key: application
-        Value: O11y Demo
+        Value: Buttercup-Pet-Clinic
         Type: KEY_AND_VALUE
       ServiceRoleArn:
         Fn::GetAtt:
@@ -266,7 +275,7 @@ Resources:
         Location:
           Ref: S3Bucket
         Type: S3
-      Name: O11yDemo
+      Name: Buttercup-Pet-Clinic
       RestartExecutionOnUpdate: true
       RoleArn:
         Fn::GetAtt:
@@ -303,7 +312,7 @@ Resources:
             Provider: CodeBuild
             Version: '1'
           Configuration:
-            ProjectName: O11yDemo
+            ProjectName: Buttercup-Pet-Clinic
             PrimarySource: SourceArtifact
           InputArtifacts:
           - Name: SourceArtifact
@@ -319,8 +328,8 @@ Resources:
             Provider: CodeDeploy
             Version: '1'
           Configuration:
-            ApplicationName: O11yDemo
-            DeploymentGroupName: O11yDemo
+            ApplicationName: Buttercup-Pet-Clinic
+            DeploymentGroupName: Buttercup-Pet-Clinic
           InputArtifacts:
           - Name: BuildArtifact
   CodestarNotificationRule:

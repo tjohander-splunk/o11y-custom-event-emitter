@@ -34,7 +34,8 @@ exports.lambdaHandler = async (event, context) => {
             state: parsed.detail.state
         },
         properties: {
-            fooProp: 'bar'
+            someKey: 'Some Value',
+            anotherKey: 'Some Other Value'
         }
     }]
 
