@@ -11,6 +11,92 @@ Parameters:
   AccessToken:
     Type: String
     NoEcho: true
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.small
+    AllowedValues:
+    - t1.micro
+    - t2.nano
+    - t2.micro
+    - t2.small
+    - t2.medium
+    - t2.large
+    - m1.small
+    - m1.medium
+    - m1.large
+    - m1.xlarge
+    - m2.xlarge
+    - m2.2xlarge
+    - m2.4xlarge
+    - m3.medium
+    - m3.large
+    - m3.xlarge
+    - m3.2xlarge
+    - m4.large
+    - m4.xlarge
+    - m4.2xlarge
+    - m4.4xlarge
+    - m4.10xlarge
+    - c1.medium
+    - c1.xlarge
+    - c3.large
+    - c3.xlarge
+    - c3.2xlarge
+    - c3.4xlarge
+    - c3.8xlarge
+    - c4.large
+    - c4.xlarge
+    - c4.2xlarge
+    - c4.4xlarge
+    - c4.8xlarge
+    - g2.2xlarge
+    - g2.8xlarge
+    - r3.large
+    - r3.xlarge
+    - r3.2xlarge
+    - r3.4xlarge
+    - r3.8xlarge
+    - i2.xlarge
+    - i2.2xlarge
+    - i2.4xlarge
+    - i2.8xlarge
+    - d2.xlarge
+    - d2.2xlarge
+    - d2.4xlarge
+    - d2.8xlarge
+    - hi1.4xlarge
+    - hs1.8xlarge
+    - cr1.8xlarge
+    - cc2.8xlarge
+    - cg1.4xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+  SSHLocation:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: '0.0.0.0/0'
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  GitHubRepo:
+    Description: The Github repo to use as the source for the CodeDeploy pipeline.
+      Must be in <org-name>\<repo-name> format
+    Default: tjohander-splunk/spring-petclinic
+    Type: String
+  GitHubConnectionARN:
+    Description: The ARN of the connection between AWS and Github.  If left blank,
+      a new connection will be created for this demo.
+    Type: String
+    Default: arn:aws:codestar-connections:us-east-2:455790677231:connection/3ce6619c-d00f-45b3-9ae6-5c2eacbfc2fc
+  EventType:
+    Description: This value will be set as an arbitrary, user-defined Custom Event
+      Type in the O11y Cloud custom event
+    Type: String
 Globals:
   Function:
     Timeout: 3
@@ -20,7 +106,244 @@ Globals:
           Ref: AccessToken
         REALM:
           Ref: Realm
+        EVENT_TYPE:
+          Ref: EventType
 Resources:
+  RootRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+            - codepipeline.amazonaws.com
+            - codebuild.amazonaws.com
+            - codedeploy.amazonaws.com
+            - codestar.amazonaws.com
+            - codestar-notifications.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+  RolePolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: root
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action: '*'
+          Resource: '*'
+      Roles:
+      - Ref: RootRole
+  RootInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - Ref: RootRole
+  S3Bucket:
+    Type: AWS::S3::Bucket
+  SNSTopic:
+    Type: AWS::SNS::Topic
+  SNSTOpicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Fn::Sub: "{\n  \"Version\": \"2008-10-17\",\n  \"Id\": \"__default_policy_ID\"\
+          ,\n  \"Statement\": [\n    {\n      \"Sid\": \"__default_statement_ID\"\
+          ,\n      \"Effect\": \"Allow\",\n      \"Principal\": {\n        \"AWS\"\
+          : \"*\"\n      },\n      \"Action\": [\n        \"SNS:GetTopicAttributes\"\
+          ,\n        \"SNS:SetTopicAttributes\",\n        \"SNS:AddPermission\",\n\
+          \        \"SNS:RemovePermission\",\n        \"SNS:DeleteTopic\",\n     \
+          \   \"SNS:Subscribe\",\n        \"SNS:ListSubscriptionsByTopic\",\n    \
+          \    \"SNS:Publish\",\n        \"SNS:Receive\"\n      ],\n      \"Resource\"\
+          : \"${SNSTopic}\",\n      \"Condition\": {\n        \"StringEquals\": {\n\
+          \          \"AWS:SourceOwner\": ${AWS::AccountId}\n        }\n      }\n\
+          \    },\n  {\n      \"Sid\": \"AWSCodeStarNotifications_publish\",\n   \
+          \   \"Effect\": \"Allow\",\n      \"Principal\": {\n        \"Service\"\
+          : [\n          \"codestar-notifications.amazonaws.com\"\n        ]\n   \
+          \   },\n      \"Action\": \"SNS:Publish\",\n      \"Resource\": \"${SNSTopic}\"\
+          ,\n      \"Condition\": {\n        \"StringEquals\": {\n            \"aws:SourceAccount\"\
+          : ${AWS::AccountId}\n        }\n      }\n    }\n  ]\n}\n"
+      Topics:
+      - Ref: SNSTopic
+  SNSTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint:
+        Fn::GetAtt:
+        - O11yEventEmitterFunction
+        - Arn
+      Protocol: lambda
+      TopicArn:
+        Ref: SNSTopic
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      SecurityGroups:
+      - Ref: InstanceSecurityGroup
+      KeyName:
+        Ref: KeyName
+      ImageId: ami-001089eb624938d9f
+      IamInstanceProfile:
+        Ref: RootInstanceProfile
+      Tags:
+      - Key: application
+        Value: O11y Demo
+      UserData: IyEvYmluL2Jhc2gKU0VSVklDRV9OQU1FPSdzcHJpbmctcGV0LWNsaW5pYy5zZXJ2aWNlJwpBUFBfRElSPSdzcHJpbmctcGV0LWNsaW5pYycKSkFSX0RJUj0ndGFyZ2V0JwpKQVJfRklMRV9OQU1FPSdzcHJpbmctcGV0Y2xpbmljLTIuNC41LmphcicKIyBSZWZlciB0byByZWdpb24tc3BlY2lmaWMgdmFsdWVzIGhlcmU6IGh0dHBzOi8vZG9jcy5hd3MuYW1hem9uLmNvbS9jb2RlZGVwbG95L2xhdGVzdC91c2VyZ3VpZGUvcmVzb3VyY2Uta2l0Lmh0bWwjcmVzb3VyY2Uta2l0LWJ1Y2tldC1uYW1lcwpDT0RFREVQTE9ZX0FHRU5UX0JVQ0tFVF9OQU1FPSdhd3MtY29kZWRlcGxveS11cy1lYXN0LTInCkNPREVERVBMT1lfQUdFTlRfUkVHSU9OX0lERU5USUZJRVI9J3VzLWVhc3QtMicKCnl1bSB1cGRhdGUgLXkKeXVtIGluc3RhbGwgcnVieSB3Z2V0IC15CgojIEluc3RhbGwgSmF2YSAxMQphbWF6b24tbGludXgtZXh0cmFzIGluc3RhbGwgamF2YS1vcGVuamRrMTEgLXkKCiMgSW5zdGFsbCBDb2RlRGVwbG95IEFnZW50LiAgRGV0YWlscyBoZXJlOiBodHRwczovL2RvY3MuYXdzLmFtYXpvbi5jb20vY29kZWRlcGxveS9sYXRlc3QvdXNlcmd1aWRlL2NvZGVkZXBsb3ktYWdlbnQtb3BlcmF0aW9ucy1pbnN0YWxsLWxpbnV4Lmh0bWwKI0NPREVERVBMT1lfQklOPSIvb3B0L2NvZGVkZXBsb3ktYWdlbnQvYmluL2NvZGVkZXBsb3ktYWdlbnQiCiMkQ09ERURFUExPWV9CSU4gc3RvcAojeXVtIGVyYXNlIGNvZGVkZXBsb3ktYWdlbnQgLXkKY2QgL2hvbWUvZWMyLXVzZXIKd2dldCBodHRwczovL2F3cy1jb2RlZGVwbG95LXVzLWVhc3QtMi5zMy51cy1lYXN0LTIuYW1hem9uYXdzLmNvbS9sYXRlc3QvaW5zdGFsbApjaG1vZCAreCAuL2luc3RhbGwKLi9pbnN0YWxsIGF1dG8KCiMgU2V0dXAgU3lzdGVtZCB0byBydW4gdGhlIFNwcmluZyBCb290IGFwcCBhcyBzZXJ2aWNlCmNhdCA+L2V0Yy9zeXN0ZW1kL3N5c3RlbS9zcHJpbmctcGV0LWNsaW5pYy5zZXJ2aWNlIDw8RU9MCltVbml0XQpEZXNjcmlwdGlvbj13ZWJzZXJ2ZXIgRGFlbW9uCgpbU2VydmljZV0KRXhlY1N0YXJ0PSAvdXNyL2Jpbi9qYXZhIC1qYXIgL2hvbWUvZWMyLXVzZXIvc3ByaW5nLXBldC1jbGluaWMvdGFyZ2V0L3NwcmluZy1wZXRjbGluaWMtMi40LjUuamFyCgpbSW5zdGFsbF0KV2FudGVkQnk9bXVsdGktdXNlci50YXJnZXQKRU9MCnN5c3RlbWN0bCBlbmFibGUgc3ByaW5nLXBldC1jbGluaWMuc2VydmljZQ==
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and Default Spring Boot App access via port 22
+        and 8080
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp:
+          Ref: SSHLocation
+      - IpProtocol: tcp
+        FromPort: '8080'
+        ToPort: '8080'
+        CidrIp:
+          Ref: SSHLocation
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        ArtifactIdentifier: SourceArtifact
+        EncryptionDisabled: true
+        Type: CODEPIPELINE
+      Cache:
+        Location:
+          Ref: S3Bucket
+        Type: S3
+      Description: Demo Build Project for Observability CI/CD
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:2.0
+        ImagePullCredentialsType: CODEBUILD
+        Type: LINUX_CONTAINER
+      Name: O11yDemo
+      QueuedTimeoutInMinutes: 5
+      ServiceRole:
+        Fn::GetAtt:
+        - RootRole
+        - Arn
+      Source:
+        GitCloneDepth: 0
+        Type: CODEPIPELINE
+  CodeDeployApplication:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: O11yDemo
+      ComputePlatform: Server
+  CodeDeployDeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: O11yDemo
+      DeploymentGroupName: O11yDemo
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      Ec2TagFilters:
+      - Key: application
+        Value: O11y Demo
+        Type: KEY_AND_VALUE
+      ServiceRoleArn:
+        Fn::GetAtt:
+        - RootRole
+        - Arn
+  CodePipelinePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    DependsOn: SNSTopic
+    Properties:
+      ArtifactStore:
+        Location:
+          Ref: S3Bucket
+        Type: S3
+      Name: O11yDemo
+      RestartExecutionOnUpdate: true
+      RoleArn:
+        Fn::GetAtt:
+        - RootRole
+        - Arn
+      Stages:
+      - Name: Source
+        Actions:
+        - RunOrder: 1
+          InputArtifacts: []
+          ActionTypeId:
+            Category: Source
+            Owner: AWS
+            Provider: CodeStarSourceConnection
+            Version: '1'
+          Configuration:
+            ConnectionArn:
+              Ref: GitHubConnectionARN
+            FullRepositoryId:
+              Ref: GitHubRepo
+            BranchName: main
+            OutputArtifactFormat: CODE_ZIP
+            DetectChanges: true
+          Name: CloneSourceCode
+          OutputArtifacts:
+          - Name: SourceArtifact
+      - Name: Build
+        Actions:
+        - Name: BuildAndTestApplication
+          RunOrder: 1
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: '1'
+          Configuration:
+            ProjectName: O11yDemo
+            PrimarySource: SourceArtifact
+          InputArtifacts:
+          - Name: SourceArtifact
+          OutputArtifacts:
+          - Name: BuildArtifact
+      - Name: Deploy
+        Actions:
+        - Name: DeployAndInit
+          RunOrder: 1
+          ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Provider: CodeDeploy
+            Version: '1'
+          Configuration:
+            ApplicationName: O11yDemo
+            DeploymentGroupName: O11yDemo
+          InputArtifacts:
+          - Name: BuildArtifact
+  CodestarNotificationRule:
+    Type: AWS::CodeStarNotifications::NotificationRule
+    DependsOn: CodePipelinePipeline
+    Properties:
+      DetailType: BASIC
+      EventTypeIds:
+      - codepipeline-pipeline-stage-execution-started
+      - codepipeline-pipeline-stage-execution-succeeded
+      - codepipeline-pipeline-action-execution-started
+      - codepipeline-pipeline-action-execution-succeeded
+      - codepipeline-pipeline-pipeline-execution-started
+      - codepipeline-pipeline-pipeline-execution-succeeded
+      - codepipeline-pipeline-pipeline-execution-failed
+      Name: O11y-Demo-Notification-Rule
+      Resource:
+        Fn::Sub: arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${CodePipelinePipeline}
+      Status: ENABLED
+      Targets:
+      - TargetAddress:
+          Ref: SNSTopic
+        TargetType: SNS
   O11yEventEmitterFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -33,7 +356,8 @@ Resources:
         HelloWorld:
           Type: SNS
           Properties:
-            Topic: arn:aws:sns:us-east-2:455790677231:codestar-notifications-spring-pet-clinic
+            Topic:
+              Ref: SNSTopic
 Outputs:
   O11yEventEmitter:
     Description: O11y Event Emitter Lambda Function ARN
@@ -47,3 +371,25 @@ Outputs:
       Fn::GetAtt:
       - O11yEventEmitterFunctionRole
       - Arn
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value:
+      Ref: EC2Instance
+  AZ:
+    Description: Availability Zone of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+      - EC2Instance
+      - AvailabilityZone
+  PublicDNS:
+    Description: Public DNSName of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+      - EC2Instance
+      - PublicDnsName
+  PublicIP:
+    Description: Public IP address of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+      - EC2Instance
+      - PublicIp

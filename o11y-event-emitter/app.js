@@ -1,4 +1,5 @@
 const axios = require('axios')
+const eventType = process.env.EVENT_TYPE
 const o11yUrl = process.env.REALM ? `https://ingest.${process.env.REALM}.signalfx.com/v2/event` : 'default-url'
 const o11yToken = process.env.ACCESS_TOKEN ? process.env.ACCESS_TOKEN : 'default-token'
 const headers = {
@@ -25,7 +26,7 @@ exports.lambdaHandler = async (event, context) => {
     // O11y Event payloads are a list of discrete events, thus the list of a single element here
     const o11yEvent = [{
         category: 'USER_DEFINED',
-        eventType: 'TSJ CI-CD Pipeline Event',
+        eventType: eventType,
         dimensions: {
             pipeline: parsed.detail.pipeline,
             stage: parsed.detail.stage,
