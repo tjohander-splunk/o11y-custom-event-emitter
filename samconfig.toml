@@ -2,10 +2,13 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "o11y-event-emitter"
+stack_name = "sam-app-observability-demo"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1fmknien4a6ky"
-s3_prefix = "o11y-event-emitter"
+s3_prefix = "sam-app-observability-demo"
 region = "us-east-2"
-capabilities = "CAPABILITY_IAM"
-image_repositories = []
 confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Realm=\"us0\" KeyName=\"tj-devlab-key-pair-001\" InstanceType=\"t2.small\" SSHLocation=\"0.0.0.0/0\" GitHubRepo=\"tjohander-splunk/spring-petclinic\" GitHubConnectionARN=\"arn:aws:codestar-connections:us-east-2:455790677231:connection/aaeb5a4f-b91f-4655-a234-e3ff4c8d1176\" EventType=\"TSJ CI-CD Pipeline Event\""
+image_repositories = []
+disable_rollback = true
+
