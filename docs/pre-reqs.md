@@ -14,3 +14,4 @@ aws ec2 run-instances \
 --tag-specifications 'ResourceType=instance,Tags=[{Key=application,Value=Spring-Pet-Clinic}]'
 ```
 * Fork and Clone the Spring Boot Pet Clinic [App and supporting AWS CodeDeploy files](https://github.com/tjohander-splunk/spring-petclinic)
+* Make A Github Connection to AWS if You don't already have one.  Note the ARN.

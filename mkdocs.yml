@@ -1,5 +1,5 @@
-site_name: My Docs
-site_url: https://tjohander-splunk.github.io/spring-petclinic-kotlin/
+site_name: O11y Event Emitter
+site_url: https://tjohander-splunk.github.io/o11y-custom-event-emitter
 theme:
   name: material
   font:
@@ -49,3 +49,7 @@ markdown_extensions:
 nav:
   - Overview: 'overview.md'
   - Pre-Requisites: 'pre-reqs.md'
+  - Provisioning AWS Resources:
+      - Provision AWS Resources via Automation (Recommended): 'provisioning-automated.md'
+      - Provision AWS Resources (Not Recommended): 'provisioning-manual.md'
+  - Execute the Demo: 'execute-demo.md'
