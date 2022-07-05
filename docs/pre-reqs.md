@@ -12,7 +12,7 @@ Details on installation and configuration for the AWS CLI can be found [here](ht
 - [ ] This step requires some manual intervention to approve a connection once you create it with the following command:
 ```bash
 aws codestar-connections create-connection \
-    --provider-type Github \
+    --provider-type GitHub \
     --connection-name <some-artbitrary-value>
 ```
 
